@@ -22,6 +22,9 @@
 /.claude/settings.local.json
 /.claude/worktrees/
 
+# Private working notes (not part of the project)
+/notes/
+
 # IDE
 /.idea/
 /.vscode/
