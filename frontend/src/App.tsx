@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import type { Wallet } from './types'
+import WalletTable from './WalletTable'
 
 async function readErrorMessage(response: Response): Promise<string> {
   try {
@@ -63,28 +64,7 @@ function App() {
       )}
       <p>Długość tokenu: {token.length}</p>
       {wallets !== null && wallets.length > 0 && (
-        <table>
-          <thead>
-            <tr>
-              <th>Waluta</th>
-              <th>Saldo</th>
-              <th>Zarezerwowane</th>
-              <th>Zablokowany</th>
-              <th>Ostatnia operacja</th>
-            </tr>
-          </thead>
-          <tbody>
-            {wallets.map((wallet) => (
-              <tr key={wallet.id}>
-                <td>{wallet.currency}</td>
-                <td>{wallet.balance}</td>
-                <td>{wallet.reservedBalance}</td>
-                <td>{wallet.isBlocked ? 'tak' : 'nie'}</td>
-                <td>{wallet.lastActivityAt ?? '—'}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <WalletTable wallets={wallets} />
       )}
     </>
   )
