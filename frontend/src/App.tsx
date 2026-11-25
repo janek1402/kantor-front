@@ -1,15 +1,7 @@
 import { useState } from 'react'
 import type { Wallet } from './types'
 import WalletTable from './WalletTable'
-
-async function readErrorMessage(response: Response): Promise<string> {
-  try {
-    const body: { error?: string } = await response.json()
-    return body.error ?? `Błąd ${response.status}`
-  } catch {
-    return `Błąd ${response.status}`
-  }
-}
+import { getWallets } from './api'
 
 function App() {
   const [token, setToken] = useState('')
@@ -21,23 +13,11 @@ function App() {
     setError(null)
     setLoading(true)
     try {
-      let response: Response
-      try {
-        response = await fetch('/api/wallets', {
-          headers: { Authorization: `Bearer ${token}` },
-        })
-      } catch {
-        setError('Nie udało się połączyć z serwerem')
-        setWallets(null)
-        return
-      }
-      if (!response.ok) {
-        setError(await readErrorMessage(response))
-        setWallets(null)
-        return
-      }
-      const data: Wallet[] = await response.json()
+      const data = await getWallets(token)
       setWallets(data)
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Nieznany błąd')
+      setWallets(null)
     } finally {
       setLoading(false)
     }
